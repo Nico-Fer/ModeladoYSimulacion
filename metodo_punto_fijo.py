@@ -1,0 +1,56 @@
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+"""
+f(x)=cos(x)
+0=cos(x)
+x= cos(x)+x
+"""
+
+def f(x):
+    return math.cos(x)
+
+def g(x):
+    return math.cos(x) + x
+
+def fixed_point_iteration(x0, tol=1e-5, max_iter=100):
+    x = x0
+    iter_values = [x0]
+    
+    for i in range(max_iter):
+        x_new = g(x)
+        iter_values.append(x_new)
+        
+        if abs(x_new - x) < tol:
+            print("Tolerancia alcanzada...")
+            break
+            
+        x = x_new
+        
+    return x_new, iter_values
+
+def main():
+    x0 = 0.5 # Valor inicial
+    root, iter_values = fixed_point_iteration(x0)
+
+    # Graficar la función original y el proceso de iteración
+    x_vals = np.linspace(-2 * np.pi, 2 * np.pi, 400)
+    y_vals = np.cos(x_vals)
+
+    plt.plot(x_vals, y_vals, label='$f(x) = cos(x)$')
+    plt.scatter(iter_values, [f(x) for x in iter_values], color='red', zorder=5)
+    plt.plot(iter_values, [f(x) for x in iter_values], color='red', linestyle='--', zorder=5)
+    plt.axhline(0, color='black',linewidth=0.5)
+    plt.axvline(0, color='black',linewidth=0.5)
+    plt.grid(color = 'gray', linestyle = '--', linewidth = 0.5)
+    plt.title('Método del Punto Fijo para $f(x) = cos(x)$')
+    plt.xlabel('$x$')
+    plt.ylabel('$f(x)$')
+    plt.legend()
+    plt.show()
+
+    print(f"La raíz aproximada es: {root}")
+
+if __name__ == "__main__":
+    main()
