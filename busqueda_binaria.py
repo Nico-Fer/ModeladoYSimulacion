@@ -1,5 +1,6 @@
 import numpy as np
 from tabulate import tabulate
+import math
 
 def busqueda_binaria_raiz(f, a, b, iteraciones, precision, error):
     """
@@ -12,9 +13,16 @@ def busqueda_binaria_raiz(f, a, b, iteraciones, precision, error):
     precision   : Tolerancia para el tamaño del intervalo (b - a).
     error       : Tolerancia para el valor de f(c) cercano a 0.
     """
+
+    if f(a) == 0.0:
+        print(f"\n¡Éxito! La raíz exacta se encuentra en el extremo 'a': {a}")
+        return a
+    if f(b) == 0.0:
+        print(f"\n¡Éxito! La raíz exacta se encuentra en el extremo 'b': {b}")
+        return b
     
     # Comprobación inicial: la función debe cambiar de signo en el intervalo
-    if f(a) * f(b) >= 0:
+    if f(a) * f(b) > 0:
         print("Error: La función no cambia de signo en el intervalo [a, b].")
         print("El método de bisección requiere que f(a) y f(b) tengan signos opuestos.")
         return None
@@ -57,13 +65,13 @@ if __name__ == "__main__":
     # Definimos una función matemática usando numpy
     # Por ejemplo: f(x) = x^3 - x - 2 (Tiene una raíz real cerca de 1.521)
     def mi_funcion(x):
-        return x**3 - x - 2
+        return ((math.sqrt(x)-(math.cos(x))))
 
     # Parámetros de la búsqueda
-    valor_a = 1.0
-    valor_b = 2.0
+    valor_a = 0.0
+    valor_b = 1.0
     max_iteraciones = 50
-    tolerancia_precision = 1e-5
+    tolerancia_precision = 1e-3
     tolerancia_error = 1e-5
 
     print(f"Buscando la raíz de f(x) = x^3 - x - 2 en el intervalo [{valor_a}, {valor_b}]\n")
