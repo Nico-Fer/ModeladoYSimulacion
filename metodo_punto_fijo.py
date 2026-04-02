@@ -9,12 +9,12 @@ x= cos(x)+x
 """
 
 def f(x):
-    return (2*math.pow(math.e, math.pow(x, 2))-5*x)
+    return (math.pow(x,3) - x - 1)
 
 def g(x):
-    return 0.4*math.pow(math.e, math.pow(x, 2))
+    return math.pow(x+1, 1/3)
 
-def fixed_point_iteration(x0, tol=1e-5, max_iter=200):
+def fixed_point_iteration(x0, tol=1e-5, max_iter=200, dominio=None):
     x = x0
     iter_values = [x0]
     errors = [None]
@@ -22,6 +22,14 @@ def fixed_point_iteration(x0, tol=1e-5, max_iter=200):
     for i in range(max_iter):
         x_new = g(x)
         error = abs(x_new - x)
+
+        # Verificación opcional del dominio acotado
+        if dominio is not None:
+            if not (dominio[0] <= x_new <= dominio[1]):
+                print(f"\n¡Advertencia! El método divergió y salió del dominio {dominio} en la iteración {i+1}.")
+                print(f"Valor calculado: x = {x_new:.6f}")
+                # Retornamos lo calculado hasta ahora antes de romper el programa
+                return None, iter_values, errors
 
         iter_values.append(x_new)
         errors.append(error)
@@ -35,29 +43,17 @@ def fixed_point_iteration(x0, tol=1e-5, max_iter=200):
     return x_new, iter_values, errors
 
 def main():
-    x0 = 0.0 # Valor inicial
-    root, iter_values, errors = fixed_point_iteration(x0)
-
-    # Graficar la función original y el proceso de iteración
-    x_vals = np.linspace(-1, 0, 400)
-    y_vals = [f(x) for x in x_vals]
-
-    plt.plot(x_vals, y_vals, label='$f(x)$')
-    plt.scatter(iter_values, [f(x) for x in iter_values], color='red', zorder=5)
-    plt.plot(iter_values, [f(x) for x in iter_values], color='red', linestyle='--', zorder=5)
-    plt.axhline(0, color='black',linewidth=0.5)
-    plt.axvline(0, color='black',linewidth=0.5)
-    plt.grid(color = 'gray', linestyle = '--', linewidth = 0.5)
-    plt.title('Método del Punto Fijo para $f(x)$')
-    plt.xlabel('$x$')
-    plt.ylabel('$f(x)$')
-    plt.legend()
-    plt.show()
+    x0 = 1 # Valor inicial
+    root, iter_values, errors = fixed_point_iteration(x0, dominio=(1,2))
 
     print("-" * 40)
-    print(f"La raíz aproximada es : {root:.6f}")
+    if root is not None:
+        print(f"La raíz aproximada es : {root:.6f}")
+    else:
+        print("No se encontró una raíz dentro del dominio especificado.")
     print(f"Iteraciones totales   : {len(iter_values) - 1}")
-    print(f"Error final           : {errors[-1]:.8f}")
+    if errors[-1] is not None:
+        print(f"Error final           : {errors[-1]:.8f}")
     print("-" * 40)
 
 if __name__ == "__main__":

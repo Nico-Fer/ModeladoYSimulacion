@@ -71,7 +71,7 @@ if __name__ == "__main__":
     valor_a = 0.0
     valor_b = 1.0
     max_iteraciones = 50
-    tolerancia_precision = 1e-3
+    tolerancia_precision = 1e-5
     tolerancia_error = 1e-5
 
     print(f"Buscando la raíz de f(x) = x^3 - x - 2 en el intervalo [{valor_a}, {valor_b}]\n")
